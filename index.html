@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>CodePen - youtube most popular videos</title>
+  <style>
+/* Define a cor de fundo da página */
+body {
+  background-color: #f5f5f5;
+}
+
+/* Define a largura máxima da seção de vídeo e centraliza-a horizontalmente */
+#video_section {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Define o estilo do título principal */
+h1 {
+  font-family: 'Merriweather', serif;
+  font-size: 3em;
+  text-align: center;
+  color: #e62117;
+  margin-top: 50px;
+}
+
+/* Define o estilo do subtítulo da seção de vídeo */
+h3 {
+  font-family: 'Merriweather', serif;
+  font-size: 1.5em;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+/* Define o estilo da lista de vídeos */
+ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-bottom: 50px;
+}
+
+/* Define o estilo dos itens de lista de vídeo */
+li {
+  flex-basis: calc(33.33% - 10px);
+  margin-bottom: 20px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Define o estilo do player de vídeo incorporado */
+iframe {
+  width: 100%;
+  height: 200px;
+  border: none;
+}
+
+/* Define o estilo do contêiner do título e descrição do vídeo */
+div {
+  padding: 10px;
+  background-color: #fff;
+}
+
+/* Define o estilo do título do vídeo */
+h3 {
+  font-size: 1.2em;
+  margin: 0;
+}
+
+/* Define o estilo da descrição do vídeo */
+h5 {
+  font-size: 1em;
+  margin: 5px 0 0 0;
+  color: #777;
+}
+
+/* Define o estilo do rodapé */
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 10px 0;
+  text-align: center;
+  background-color: #222;
+  color: #fff;
+  font-size: 0.8em;
+  opacity: 0.8;
+}
+
+
+</style>
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style> 
+        @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@700&display=swap'); 
+    </style>
+  
+  
+  <title>Youtube_trend</title>
+</head>
+<body>
+    <h1>YOUTUBE TREND</h1>
+    <section>
+        <h3>Most Popular Videos</h3>
+        <ul id = 'video_section'>
+        </ul>
+    </section>
+    <footer>If the videos are not showen, please turn off the ADDBLOCK chrome extension</footer>
+</body>
+<script src="youtube.js"></script>
+</html>
+<!-- partial -->
+  <script>
+const API = "AIzaSyDveMPWEySYWVotJWYVy9jLr7PZIuPJRjk";
+const URL = "https://youtube.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&maxResults=25&key="+API;
+const videoURL = "https://www.youtube.com/embed/";
+
+var rank = 1;
+const video_section = document.getElementById('video_section');
+
+
+fetch(URL)
+    .then(response => response.json())
+    .then(response => {
+        // console.log(response);
+        response.items.forEach((element) =>{
+            // console.log(element.id); // video src
+            // console.log(element.snippet.channelTitle); // video channel title
+            // console.log(element.snippet.title); // video title
+
+            //create the elemenets
+            let video_li = document.createElement('li');
+            let video_div = document.createElement('div');
+            let video_iframe = document.createElement('iframe');
+            //set the iframe src
+            video_iframe.setAttribute("src", videoURL+element.id);
+            
+            //create the title, desc
+            let video_title = document.createElement("h3");
+            video_title.innerText = rank + ". " +element.snippet.channelTitle;
+            let video_desc = document.createElement("h5");
+            video_desc.innerText = element.snippet.title;
+
+            //append the context
+            video_div.appendChild(video_iframe);
+            video_div.appendChild(video_title);
+            video_div.appendChild(video_desc);
+            video_li.appendChild(video_div);
+            video_section.appendChild(video_li);
+
+            //rank ++
+            rank++;
+
+
+        })
+    });
+</script>
+
+</body>
+</html>
